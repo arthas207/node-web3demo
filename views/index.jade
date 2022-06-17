@@ -1,0 +1,79 @@
+extends layout
+
+block content
+  script(src="https://code.jquery.com/jquery-3.1.1.min.js")
+  script.
+    function getBalanceByAddress(){
+     $.get("/getBalanceByAddress",{address:$('#balanceTd input[name=address]').val()},function(data){
+       console.log(data);
+       $('#console').html('<p>'+JSON.stringify(data)+'</p>')
+       },'json');
+     }
+    function getNonceByAddress() {
+      $.get("/getNonceByAddress", {address: $('#nonseTd input[name=address]').val()}, function (data) {
+        console.log(data);
+        $('#console').html('<p>' + JSON.stringify(data) + '</p>')
+      }, 'json');
+    }
+    function getTransaction() {
+      $.get("/getTransaction", {txHash: $('#transTd input[name=txHash]').val()}, function (data) {
+        console.log(data);
+        $('#console').html('<p>' + JSON.stringify(data) + '</p>')
+      }, 'json');
+    }
+    function getTokenBalance() {
+      $.get("/getTokenBalance", {address: $('#tokenBalanceTd input[name=address]').val()}, function (data) {
+        console.log(data);
+        $('#console').html('<p>' + JSON.stringify(data) + '</p>')
+      }, 'json');
+    }
+    function transfer() {
+      console.log($('#transferTr td input[name=from]').val());
+      $.get("/transfer", {from: $('#transferTr td input[name=from]').val(),to: $('#transferTr td input[name=to]').val(),amount: $('#transferTr td input[name=amount]').val(),privateKey: $('#transferTr td input[name=privateKey]').val()}, function (data) {
+        console.log(data);
+        $('#console').html('<p>' + JSON.stringify(data) + '</p>')
+      }, 'json');
+    }
+    function addressGenerate() {
+      $.get("/addressGenerate",{privateKey: $('#addrGenTd input[name=privateKey]').val()}, function (data) {
+        console.log(data);
+        $('#console').html('<p>' + JSON.stringify(data) + '</p>')
+      }, 'json');
+    }
+  h1= title
+  table
+    tr
+      td#balanceTd
+        label 查询余额:
+        input(type="text", name="address", value="")
+        input(type='submit' value='提交' onclick="getBalanceByAddress()")
+      td#nonseTd
+        label 查询地址nonce:
+        input(type="text", name="address", value="")
+        input(type='submit' value='提交' onclick="getNonceByAddress()")
+    tr
+      td#transTd
+        label 查询交易:
+        input(type="text", name="txHash", value="")
+        input(type='submit' value='提交' onclick="getTransaction()")
+      td#tokenBalanceTd
+        label 查询指定地址的指定token余额:
+        input(type="text", name="address", value="")
+        input(type='submit' value='提交' onclick="getTokenBalance()")
+    tr#transferTr
+      td 转账:
+        label from
+        input(type="text", name="from", value="")
+        label to:
+        input(type="text", name="to", value="")
+        label amount:
+        input(type="text", name="amount", value="")
+        label privateKey:
+        input(type="text", name="privateKey", value="")
+        input(type='submit' onclick='transfer()' value='提交')
+    tr
+      td#addrGenTd
+        label 从私钥计算公钥和ETH地址:
+        input(type="text", name="privateKey", value="")
+        input(type='submit' onclick='addressGenerate()' value='提交')
+  div#console
