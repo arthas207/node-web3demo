@@ -122,7 +122,7 @@ router.get('/getBalanceByAddress', function (req, res, next) {
     });
 });
 // 获取nonse
-router.get('/getNonseByAddress', function (req, res, next) {
+router.get('/getNonceByAddress', function (req, res, next) {
     console.log(req.query.address);
     web3.eth.getTransactionCount(req.query.address, (error, rs) => {
         console.log(rs.toString());
